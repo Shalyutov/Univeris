@@ -19,5 +19,16 @@ namespace Univeris.Global
         /// Краткое описание или ссылка на страницу (markdown)
         /// </summary>
         public string Description { get; set; } = "";
+        /// <summary>
+        /// Конструктор факультета
+        /// </summary>
+        /// <param name="name">Наименование</param>
+        /// <param name="description">Описание</param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public Faculty(string name, string description)
+        {
+            Name = name ?? throw new ArgumentNullException(nameof(name));
+            Description = description ?? throw new ArgumentNullException(nameof(description));
+        }
     }
 }
