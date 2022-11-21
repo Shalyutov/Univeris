@@ -7,14 +7,18 @@ using System.Threading.Tasks;
 namespace Univeris.Global
 {
     /// <summary>
-    /// Факультет/институт/высшая школа
+    /// Кафедра/Подразделение
     /// </summary>
-    internal class Faculty
+    internal class Department
     {
         /// <summary>
-        /// Наименование института/высшей школы/факультета
+        /// Наименование кафедры/подразделения
         /// </summary>
         public string Name { get; set; } = "";
+        /// <summary>
+        /// Управляющий факультет
+        /// </summary>
+        public Faculty Faculty { get; set; }
         /// <summary>
         /// Краткое описание или ссылка на страницу (markdown)
         /// </summary>
