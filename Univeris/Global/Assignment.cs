@@ -60,6 +60,35 @@ namespace Univeris.Global
         /// <summary>
         /// Выделенное количество баллов (зависит от Положения БРС)
         /// </summary>
-        public int Score { get; set; }
+        virtual public int Score { get; set; }
+        /// <summary>
+        /// Конструктор контрольной точки
+        /// </summary>
+        /// <param name="name">Название</param>
+        /// <param name="type">Тип</param>
+        /// <param name="subject">Дисциплина</param>
+        /// <param name="score">Выделенные баллы</param>
+        /// <exception cref="ArgumentNullException">Неверное задание имени или предмета</exception>
+        public Assignment(string name, AssignmentType type, Subject subject, int score)
+        {
+            Name = name ?? throw new ArgumentNullException(nameof(name));
+            Type = type;
+            Subject = subject ?? throw new ArgumentNullException(nameof(subject));
+            Score = score;
+        }
+        /// <summary>
+        /// Конструктор контрольной точки с исходным количеством баллов = 0
+        /// </summary>
+        /// <param name="name">Название</param>
+        /// <param name="type">Тип</param>
+        /// <param name="subject">Дисциплина</param>
+        /// <exception cref="ArgumentNullException">Неверное задание имени или предмета</exception>
+        public Assignment(string name, AssignmentType type, Subject subject)
+        {
+            Name = name ?? throw new ArgumentNullException(nameof(name));
+            Type = type;
+            Subject = subject ?? throw new ArgumentNullException(nameof(subject));
+            Score = 0;
+        }
     }
 }

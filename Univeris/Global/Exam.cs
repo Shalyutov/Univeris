@@ -58,8 +58,25 @@ namespace Univeris.Global
         /// </summary>
         public string Description { get; set; } = "";
         /// <summary>
-        /// Выделенное количество баллов (вес, БРС, обычно = 40)
+        /// Выделенное количество баллов (вес см. БРС, обычно = 40)
         /// </summary>
         public int Score { get; set; }
+        /// <summary>
+        /// Конструктор аттестации для дисциплины
+        /// </summary>
+        /// <param name="name">Название</param>
+        /// <param name="type">Тип</param>
+        /// <param name="subject">Дисциплина</param>
+        /// <param name="description">Описание</param>
+        /// <param name="score">Выделенные баллы</param>
+        /// <exception cref="ArgumentNullException"></exception>
+        public Exam(string name, ExamType type, Subject subject, string description, int score)
+        {
+            Name = name ?? throw new ArgumentNullException(nameof(name));
+            Type = type;
+            Subject = subject ?? throw new ArgumentNullException(nameof(subject));
+            Description = description ?? throw new ArgumentNullException(nameof(description));
+            Score = score;
+        }
     }
 }
