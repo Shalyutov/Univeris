@@ -23,5 +23,12 @@ namespace Univeris.Global
         /// Краткое описание или ссылка на страницу (markdown)
         /// </summary>
         public string Description { get; set; } = "";
+
+        public Department(string name, Faculty faculty, string description)
+        {
+            Name = name ?? throw new ArgumentNullException(nameof(name));
+            Faculty = faculty ?? throw new ArgumentNullException(nameof(faculty));
+            Description = description ?? throw new ArgumentNullException(nameof(description));
+        }
     }
 }

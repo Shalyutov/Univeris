@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Univeris.Global.Assignment" Collapsed="true">
+    <Position X="2.75" Y="5.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAgAAIAAAAQAAAAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>Global\Assignment.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Type" />
+      <Property Name="Subject" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Univeris.Global.AssignmentCriteria" Collapsed="true">
+    <Position X="5.25" Y="6.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAABIIAAAAAgAAAAAAAAAAQAAAAAAAAAAAABAAAAAAA=</HashCode>
+      <FileName>Global\ExtendedAssignment.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Field Name="_steps" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Univeris.Global.CriteriaStep" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="5.25" Y="7.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAwAgAAAAAQAAAAAAIAAAAAAAAAAAiA=</HashCode>
+      <FileName>Global\ExtendedAssignment.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Univeris.Global.Degree" Collapsed="true">
+    <Position X="2.75" Y="2.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAAAAAAgAAQAEAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Global\Degree.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Department" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Univeris.Global.Department" Collapsed="true">
+    <Position X="2.75" Y="1.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAIAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Global\Department.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Faculty" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Univeris.Global.Exam" Collapsed="true">
+    <Position X="2.75" Y="4.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAgAAIAAAAQAAAAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>Global\Exam.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Type" />
+      <Property Name="Subject" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Univeris.Global.ExtendedAssignment" Collapsed="true">
+    <Position X="2.75" Y="6.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Global\ExtendedAssignment.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Criterias" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Univeris.Global.Faculty" Collapsed="true">
+    <Position X="2.75" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Global\Faculty.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Univeris.Global.Subject" Collapsed="true">
+    <Position X="2.75" Y="3.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgAQAAIABAAAQwAABAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Global\Subject.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Degree" />
+    </ShowAsAssociation>
+  </Class>
+  <Enum Name="Univeris.Global.AssignmentType" Collapsed="true">
+    <Position X="0.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAGAAAgAAAAAAAAAgAAAAAAAAAAAACgQAAAA=</HashCode>
+      <FileName>Global\Assignment.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Univeris.Global.ExamType" Collapsed="true">
+    <Position X="0.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIAAAAAAQAAAAAAAAAAAAAAAAAAABAYAAAAAAEAAA=</HashCode>
+      <FileName>Global\Exam.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

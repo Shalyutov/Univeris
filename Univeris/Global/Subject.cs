@@ -24,6 +24,26 @@ namespace Univeris.Global
         /// </summary>
         public string Description { get; set; }
         /// <summary>
+        /// Семестр изучения
+        /// </summary>
+        public int Semester { get; set; }
+        /// <summary>
+        /// Объём лекционной работы
+        /// </summary>
+        public int Lectures { get; set; }
+        /// <summary>
+        /// Объём практических занятий
+        /// </summary>
+        public int Practice { get; set; }
+        /// <summary>
+        /// Объём лабораторных занятий
+        /// </summary>
+        public int Laboratory { get; set; }
+        /// <summary>
+        /// Объём самостоятельной работы студента
+        /// </summary>
+        public int SelfStudent { get; set; }
+        /// <summary>
         /// Констурктор дисциплины
         /// </summary>
         /// <param name="name">Название</param>
@@ -35,6 +55,18 @@ namespace Univeris.Global
             Name = name ?? throw new ArgumentNullException(nameof(name));
             Degree = degree ?? throw new ArgumentNullException(nameof(degree));
             Description = description ?? throw new ArgumentNullException(nameof(description));
+            Semester = 0;
+        }
+        public Subject(string name, Degree degree, string description, int semester) : this(name, degree, description)
+        {
+            Semester = semester;
+        }
+        public Subject(string name, Degree degree, string description, int semester, int lectures, int practice, int laboratory, int selfStudent) : this(name, degree, description, semester)
+        {
+            Lectures = lectures;
+            Practice = practice;
+            Laboratory = laboratory;
+            SelfStudent = selfStudent;
         }
     }
 }

@@ -10,5 +10,11 @@ namespace Univeris.Identity
     {
         public string Name { get; set; }
         public string Description { get; set; }
+
+        public ClaimType(string name, string description)
+        {
+            Name = name ?? throw new ArgumentNullException(nameof(name));
+            Description = description ?? throw new ArgumentNullException(nameof(description));
+        }
     }
 }

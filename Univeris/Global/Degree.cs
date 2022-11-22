@@ -27,5 +27,13 @@ namespace Univeris.Global
         /// Краткое описание
         /// </summary>
         public string Description { get; set; } = "";
+
+        public Degree(string code, string name, Department department, string description)
+        {
+            Code = code ?? throw new ArgumentNullException(nameof(code));
+            Name = name ?? throw new ArgumentNullException(nameof(name));
+            Department = department ?? throw new ArgumentNullException(nameof(department));
+            Description = description ?? throw new ArgumentNullException(nameof(description));
+        }
     }
 }

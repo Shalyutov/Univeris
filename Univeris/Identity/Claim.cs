@@ -11,5 +11,12 @@ namespace Univeris.Identity
         public ClaimType Type { get; set; }
         public User User { get; set; }
         public object Value { get; set; }
+
+        public Claim(ClaimType type, User user, object value)
+        {
+            Type = type ?? throw new ArgumentNullException(nameof(type));
+            User = user ?? throw new ArgumentNullException(nameof(user));
+            Value = value ?? throw new ArgumentNullException(nameof(value));
+        }
     }
 }
