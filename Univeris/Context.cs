@@ -29,7 +29,6 @@ namespace Univeris
         #endregion
         #region Identity
         public List<User> Users { get; set; } = new List<User>();
-        public List<Claim> Claims { get; set; } = new List<Claim>();
         public List<ClaimType> ClaimTypes { get; set; } = new List<ClaimType>();
         public List<AccessClaim> CourseAccess { get; set; } = new List<AccessClaim>();
         #endregion

@@ -8,12 +8,13 @@ namespace Univeris.Identity
 {
     internal class User : IEquatable<User?>
     {
-        public int Uuid { get; set; }
         private string name;
         private string password;
         private string email;
         private string phone;
-
+        public int Uuid { get; private set; }
+        public string Username { get => name; private set => name = value; }
+        
         public User(int uuid, string name, string password, string email, string phone)
         {
             Uuid = uuid;
@@ -22,6 +23,8 @@ namespace Univeris.Identity
             this.email = email ?? throw new ArgumentNullException(nameof(email));
             this.phone = phone ?? throw new ArgumentNullException(nameof(phone));
         }
+        
+        public bool IsPasswordValid(string password) => password == this.password; 
 
         public override bool Equals(object? obj)
         {

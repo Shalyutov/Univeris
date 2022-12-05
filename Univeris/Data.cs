@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Univeris.Global;
 using Univeris.Actual;
 using Univeris.Identity;
+using Univeris.Identity.Claims;
 
 namespace Univeris
 {
@@ -19,28 +20,43 @@ namespace Univeris
             GetStudy();
             GetActualIdentities();
             GetActualStudy();
+            GetClaims();
         }
         void GetFaculty()
         {
             Context.Faculties.Add(new Faculty("Высшая школа электроники и компьютерных наук", ""));
             Context.Departments.Add(new Department("Системное программирование", Context.Faculties[0], ""));
-            Context.Degrees.Add(new Degree("01.02.03", "Фундаментальная информатика и информационные технологии", Context.Departments[0], ""));
+            Context.Degrees.Add(new Degree("02.03.02", "Фундаментальная информатика и информационные технологии", Context.Departments[0], ""));
         }
         void GetStudy()
         {
             Context.Subjects.Add(new Subject("Алгебра и геометрия", Context.Degrees[0], "", 1));
-            Context.Exams.Add(new Exam("Итоговый тест в аудитории", ExamType.Exam, Context.Subjects[0], "", 40));
-            Context.Assignments.Add(new Assignment("Матрицы и векторы", AssignmentType.CheckPoint, Context.Subjects[0]));
+            Context.Exams.Add(new Exam("Итоговый тест", ExamType.Exam, Context.Subjects[0], "", 40));
+            Context.Assignments.Add(new Assignment("Матрицы", AssignmentType.CheckPoint, Context.Subjects[0], 15));
+            Context.Assignments.Add(new Assignment("Векторы", AssignmentType.CheckPoint, Context.Subjects[0], 15));
+            Context.Assignments.Add(new Assignment("Системы линейных алгебраических уравнений", AssignmentType.CheckPoint, Context.Subjects[0], 15));
+            Context.Assignments.Add(new Assignment("Уравнение прямой на плоскости", AssignmentType.CheckPoint, Context.Subjects[0], 15));
         }
         void GetActualIdentities()
         {
-            Context.Users.Add(new User(10001, "Андрей", "Icvm1864", "shalyutov.a@ya.ru", "+79000000000"));
+            Context.Users.Add(new User(10001, "Андрей", "123", "shalyutov.a@ya.ru", "+79000000000"));
+            Context.Users.Add(new User(10002, "Ирина", "456", "irina@ya.ru", "+79100000007"));
+            Context.Users.Add(new User(10003, "Игорь", "789", "igor@ya.ru", "+79059000521"));
         }
         void GetActualStudy()
         {
             Context.Courses.Add(new Course(Context.Subjects[0], 2023));
-            Context.Assessments.Add(new Assessment(Context.Courses[0], Context.Assignments[0], 42, Context.Users[0]));
-            Context.ExamStatements.Add(new ExamStatement(Context.Courses[0], Context.Exams[0], 33, Context.Users[0]));
+            Context.Assessments.Add(new Assessment(Context.Courses[0], Context.Assignments[0], 15, Context.Users[0]));
+            Context.Assessments.Add(new Assessment(Context.Courses[0], Context.Assignments[1], 12, Context.Users[0]));
+            Context.Assessments.Add(new Assessment(Context.Courses[0], Context.Assignments[2], 11, Context.Users[0]));
+            Context.Assessments.Add(new Assessment(Context.Courses[0], Context.Assignments[3], 14, Context.Users[0]));
+            Context.ExamStatements.Add(new ExamStatement(Context.Courses[0], Context.Exams[0], 34, Context.Users[0]));
+        }
+        void GetClaims()
+        {
+            Context.ClaimTypes.Add(new ClaimType("Участник курса", "Обладатель утверждения получает доступ к курсу"));
+            Context.CourseAccess.Add(new AccessClaim(Context.ClaimTypes[0], Context.Users[0], Context.Courses[0], AccessLevel.Student));
+            Context.CourseAccess.Add(new AccessClaim(Context.ClaimTypes[0], Context.Users[1], Context.Courses[0], AccessLevel.Teacher));
         }
     }
 }

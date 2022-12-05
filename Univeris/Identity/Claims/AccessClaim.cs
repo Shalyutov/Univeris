@@ -3,16 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Univeris.Actual;
 
 namespace Univeris.Identity.Claims
 {
-    internal class AccessClaim : Claim
+    enum AccessLevel
     {
-        public int Level { get; set; }
+        Guest, Student, Teacher, Administrator
+    }
+    internal class AccessClaim : Claim<Course>
+    {
+        private Course course;
+        public AccessLevel Level { get; set; }
+        public override Course Value => course;
 
-        public AccessClaim(ClaimType type, User user, object value, int level) : base(type, user, value)
+        public AccessClaim(ClaimType type, User user, Course value, AccessLevel level) : base(type, user, value)
         {
             Level = level;
+            course = value;
         }
     }
 }
