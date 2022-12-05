@@ -22,33 +22,36 @@ namespace Univeris
         {
             Console.WriteLine("КИАС Универис");
             Console.WriteLine("Добро пожаловать");
-            Home();
+            Command();
         }
-        public void Home()
+        public void Command()
         {
-            Console.WriteLine("Вводите команды для взаимодействия с системой. Для выхода введите \"Закрыть\"");
-            var command = Console.ReadLine();
-            while (command != "Закрыть")
+            var command = string.Empty;
+            do
             {
+                Console.WriteLine("Введите команду для работы с системой. Для выхода введите \"закрыть\"");
+                command = Console.ReadLine();
                 switch (command)
                 {
-                    case "Войти":
+                    case "войти":
                         Navigate(SignIn);
                         break;
-                    case "Курсы":
+                    case "курс":
                         Navigate(Cources);
                         break;
-                    case "Успеваемость":
+                    case "оценки":
                         Navigate(Performance);
                         break;
-                    case "Выйти":
+                    case "я":
+                        Navigate(Account);
+                        break;
+                    case "выйти":
                         Navigate(SignOut);
                         break;
                 }
-                if (command == "Закрыть") break;
-                Console.WriteLine("Вводите команды для взаимодействия с системой. Для выхода введите \"Закрыть\"");
-                command = Console.ReadLine();
+                if (command == "закрыть") break;
             }
+            while (command != "закрыть");
         }
         public void Navigate(Action action)
         {
@@ -63,6 +66,7 @@ namespace Univeris
             }
             Console.Clear();
             Console.WriteLine($"КИАС Универис\tВход выполнен\tАккаунт: {user.Username}");
+            if (action == SignIn) return;
             action();
         }
         public void SignIn()
@@ -115,6 +119,8 @@ namespace Univeris
         public void SignOut()
         {
             user = null;
+            Console.Clear();
+            Console.WriteLine("КИАС Универис");
             Console.WriteLine("Вы вышли из системы");
             return;
         }
@@ -160,22 +166,30 @@ namespace Univeris
                 foreach (var assessment in assessments)
                 {
                     sum += assessment.Value;
-                    Console.WriteLine($"\t{assessment.Assignment.Name}\t{assessment.Value}");
-                    
+                    Console.Write($"\t{assessment.Assignment.Name}");
+                    if (assessment.Value*1.0 >= assessment.Assignment.Score*0.6)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                    }
+                    Console.WriteLine($"\t{assessment.Value}");
+                    Console.ResetColor();
                 }
                 var examresult = data.Context.ExamStatements.Find(exam=>exam.User == user && exam.Course == course);
                 if (examresult != null)
                 {
+                    sum += examresult.Value;
                     Console.WriteLine("\nЭкзамен");
                     Console.WriteLine($"\t{examresult.Exam.Name}\t{examresult.Value}");
-                    
-                    sum+= examresult.Value;
                 }
                 else
                 {
-                    Console.WriteLine("\nПромежуточная аттестация ещё не наступила");
+                    Console.WriteLine("\nСессия ещё не наступила");
                 }
-                Console.Write($"\nИтого {sum} баллов\n\nОценка: ");
+                Console.Write($"\nИтого {sum} баллов\n\nОценка за дисциплину: ");
                 if (sum >= 85)
                 {
                     Console.ForegroundColor = ConsoleColor.Green;
@@ -183,13 +197,46 @@ namespace Univeris
                     Console.ResetColor();
                 }
                 else if (sum >= 75)
+                {
+                    Console.ForegroundColor = ConsoleColor.Blue;
                     Console.WriteLine("Хорошо\n");
+                    Console.ResetColor();
+                }
                 else if (sum >= 60)
+                {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.WriteLine("Удовлетворительно\n");
+                    Console.ResetColor();
+                }
                 else
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Неудовлетворительно\n");
+                    Console.ResetColor();
+                } 
             }
             if (i == 0) Console.WriteLine("Вы не участвуете ни в одном курсе");
+        }
+        public void Account()
+        {
+            Console.WriteLine("Ваш аккаунт");
+            Console.WriteLine($"Имя:\t{user?.Username}");
+            Console.WriteLine($"Почта:\t{user?.Email}");
+            Console.WriteLine($"Телефон:\t{user?.Phone}");
+            
+            var claims = data.Context.Claims.FindAll(claim => claim.User == user);
+            if (claims.Count == 0)
+            {
+                Console.WriteLine("У вас нет утверждений в системе");
+            }
+            else
+            {
+                Console.WriteLine("\nВаши утверждения в системе");
+                foreach (var claim in claims)
+                {
+                    Console.WriteLine("\t" + claim.ToString());
+                }
+            }
         }
     }
 }

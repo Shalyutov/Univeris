@@ -14,7 +14,9 @@ namespace Univeris.Identity
         private string phone;
         public int Uuid { get; private set; }
         public string Username { get => name; private set => name = value; }
-        
+        public string Email { get => email; private set => email = value; }
+        public string Phone { get => phone; private set => phone = value; }
+
         public User(int uuid, string name, string password, string email, string phone)
         {
             Uuid = uuid;

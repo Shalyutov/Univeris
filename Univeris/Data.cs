@@ -20,12 +20,14 @@ namespace Univeris
             GetStudy();
             GetActualIdentities();
             GetActualStudy();
+            GetGroups();
             GetClaims();
         }
         void GetFaculty()
         {
             Context.Faculties.Add(new Faculty("Высшая школа электроники и компьютерных наук", ""));
             Context.Departments.Add(new Department("Системное программирование", Context.Faculties[0], ""));
+            Context.Departments.Add(new Department("Математическое обеспечение информационных технологий", Context.Faculties[0], ""));
             Context.Degrees.Add(new Degree("02.03.02", "Фундаментальная информатика и информационные технологии", Context.Departments[0], ""));
         }
         void GetStudy()
@@ -52,11 +54,24 @@ namespace Univeris
             Context.Assessments.Add(new Assessment(Context.Courses[0], Context.Assignments[3], 14, Context.Users[0]));
             Context.ExamStatements.Add(new ExamStatement(Context.Courses[0], Context.Exams[0], 34, Context.Users[0]));
         }
+        void GetGroups()
+        {
+            Context.Groups.Add(new AcademicGroup("КЭ-301", "", Context.Degrees[0], 3));
+            Context.Groups.Add(new AcademicGroup("КЭ-302", "", Context.Degrees[0], 3));
+        }
         void GetClaims()
         {
             Context.ClaimTypes.Add(new ClaimType("Участник курса", "Обладатель утверждения получает доступ к курсу"));
+            Context.ClaimTypes.Add(new ClaimType("Сотрудник кафедры", "Обладатель утверждения прикреплён к кафедре"));
+            Context.ClaimTypes.Add(new ClaimType("Студент группы", "Обладатель утверждения состоит в академической группе"));
             Context.CourseAccess.Add(new AccessClaim(Context.ClaimTypes[0], Context.Users[0], Context.Courses[0], AccessLevel.Student));
             Context.CourseAccess.Add(new AccessClaim(Context.ClaimTypes[0], Context.Users[1], Context.Courses[0], AccessLevel.Teacher));
+            Claim c = new GroupClaim(Context.ClaimTypes[2], Context.Users[0], Context.Groups[1]);
+            Context.Claims.Add(c);
+            c = new GroupClaim(Context.ClaimTypes[2], Context.Users[2], Context.Groups[0]);
+            Context.Claims.Add(c);
+            c = new DepartmentClaim(Context.ClaimTypes[1], Context.Users[1], Context.Departments[1]);
+            Context.Claims.Add(c);
         }
     }
 }
