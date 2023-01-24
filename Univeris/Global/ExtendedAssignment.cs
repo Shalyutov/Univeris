@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -107,6 +108,7 @@ namespace Univeris.Global
         /// <param name="description">Описание</param>
         /// <param name="steps">Шаги критерия</param>
         /// <exception cref="ArgumentNullException"></exception>
+        [JsonConstructor]
         public AssignmentCriteria(string name, string description, List<CriteriaStep> steps)
         {
             Name = name;
@@ -185,6 +187,7 @@ namespace Univeris.Global
         /// <param name="subject">Дисциплина</param>
         /// <param name="score">Выделенное количество баллов</param>
         /// <param name="criterias">Список критериев</param>
+        [JsonConstructor]
         public ExtendedAssignment(string name, AssignmentType type, Subject subject, int score, List<AssignmentCriteria> criterias) : base(name, type, subject, score)
         {
             Criterias = criterias;

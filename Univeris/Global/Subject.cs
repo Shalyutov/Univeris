@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -61,6 +62,7 @@ namespace Univeris.Global
         {
             Semester = semester;
         }
+        [JsonConstructor]
         public Subject(string name, Degree degree, string description, int semester, int lectures, int practice, int laboratory, int selfStudent) : this(name, degree, description, semester)
         {
             Lectures = lectures;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,19 +9,21 @@ namespace Univeris.Identity
 {
     internal class User : IEquatable<User?>
     {
+        private int uuid;
         private string name;
         private string password;
         private string email;
         private string phone;
-        public int Uuid { get; private set; }
+        public int Uuid { get => uuid; private set => uuid = value; }
         public string Username { get => name; private set => name = value; }
         public string Email { get => email; private set => email = value; }
         public string Phone { get => phone; private set => phone = value; }
+        public string Password { private get => password; private set => password = value; }
 
-        public User(int uuid, string name, string password, string email, string phone)
+        public User(int uuid, string username, string password, string email, string phone)
         {
             Uuid = uuid;
-            this.name = name ?? throw new ArgumentNullException(nameof(name));
+            this.name = username ?? throw new ArgumentNullException(nameof(name));
             this.password = password ?? throw new ArgumentNullException(nameof(password));
             this.email = email ?? throw new ArgumentNullException(nameof(email));
             this.phone = phone ?? throw new ArgumentNullException(nameof(phone));

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,7 @@ using Univeris.Identity.Claims;
 
 namespace Univeris.Identity
 {
-    internal abstract class Claim<T>
+    internal class Claim<T>
     {
         public ClaimType Type { get; set; }
         public User User { get; set; }
@@ -22,11 +23,13 @@ namespace Univeris.Identity
             Value = value ?? throw new ArgumentNullException(nameof(value));
         }
     }
+    
     internal class Claim : Claim<object>
     {
         private object _value;
         public override object Value => _value;
 
+        [JsonConstructor]
         public Claim(ClaimType type, User user, object value) : base(type, user, value)
         {
             _value = value;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -69,6 +70,7 @@ namespace Univeris.Global
         /// <param name="subject">Дисциплина</param>
         /// <param name="score">Выделенные баллы</param>
         /// <exception cref="ArgumentNullException">Неверное задание имени или предмета</exception>
+        [JsonConstructor]
         public Assignment(string name, AssignmentType type, Subject subject, int score)
         {
             Name = name ?? throw new ArgumentNullException(nameof(name));

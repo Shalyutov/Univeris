@@ -7,6 +7,7 @@ using Univeris.Global;
 using Univeris.Actual;
 using Univeris.Identity;
 using Univeris.Identity.Claims;
+using Newtonsoft.Json;
 
 namespace Univeris
 {
@@ -15,13 +16,15 @@ namespace Univeris
         public Context Context { get; set; }
         public Data()
         {
-            Context = new Context();
+            Open();
+            /*Context = new Context();
             GetFaculty();
             GetStudy();
             GetActualIdentities();
             GetActualStudy();
             GetGroups();
-            GetClaims();
+            GetClaims();*/
+            Save();
         }
         void GetFaculty()
         {
@@ -72,6 +75,16 @@ namespace Univeris
             Context.Claims.Add(c);
             c = new DepartmentClaim(Context.ClaimTypes[1], Context.Users[1], Context.Departments[1]);
             Context.Claims.Add(c);
+        }
+        public void Open()
+        {
+            string text = File.OpenText("data.json").ReadToEnd();
+            var context = JsonConvert.DeserializeObject<Context>(text);
+        }
+        public void Save()
+        {
+            string json = JsonConvert.SerializeObject(this, Formatting.Indented, new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All });
+            File.WriteAllText("data.json", json);
         }
     }
 }

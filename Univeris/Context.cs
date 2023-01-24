@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -34,5 +36,6 @@ namespace Univeris
         public List<AccessClaim> CourseAccess { get; set; } = new List<AccessClaim>();
         public List<Claim> Claims { get; set; } = new List<Claim>();
         #endregion
+        
     }
 }
