@@ -7,18 +7,19 @@ using System.Threading.Tasks;
 
 namespace Univeris.Identity
 {
-    internal class User : IEquatable<User?>
+    public class User : IEquatable<User?>
     {
         private int uuid;
         private string name;
-        private string password;
         private string email;
         private string phone;
+        private string password;
+
         public int Uuid { get => uuid; private set => uuid = value; }
         public string Username { get => name; private set => name = value; }
         public string Email { get => email; private set => email = value; }
         public string Phone { get => phone; private set => phone = value; }
-        public string Password { private get => password; private set => password = value; }
+        
 
         public User(int uuid, string username, string password, string email, string phone)
         {

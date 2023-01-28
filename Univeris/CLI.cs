@@ -11,12 +11,10 @@ namespace Univeris
 {
     internal class CLI
     {
-        private User? user;
-        private Data data;
-
+        private Core core;
         public CLI()
         {
-            data = new Data();
+            core = new Core();
         }
         public void Handle()
         {
@@ -56,16 +54,16 @@ namespace Univeris
         public void Navigate(Action action)
         {
             Console.Clear();
-            if (user == null)
+            if (core.User == null)
             {
                 Console.WriteLine("КИАС Универис");
                 Console.WriteLine("Вы не авторизованы");
                 if (action == SignOut) return;
                 SignIn();
-                if (user == null) return;
+                if (core.User == null) return;
             }
             Console.Clear();
-            Console.WriteLine($"КИАС Универис\tВход выполнен\tАккаунт: {user.Username}");
+            Console.WriteLine($"КИАС Универис\tВход выполнен\tАккаунт: {core.User.Username}");
             if (action == SignIn) return;
             action();
         }
@@ -76,7 +74,7 @@ namespace Univeris
             string username = Console.ReadLine() ?? "";
             Console.Write("Пароль: ");
             string password = ReadPassword();
-            if (SignIn(username, password))
+            if (core.SignIn(username, password))
             {
                 Console.WriteLine("");
                 return;
@@ -109,16 +107,10 @@ namespace Univeris
             } while (key != ConsoleKey.Enter);
             return pass;
         }
-        public bool SignIn(string username, string password)
-        {
-            if (string.IsNullOrEmpty(username)) return false;
-            if (string.IsNullOrEmpty(password)) return false;
-            user = data.Context.Users.Find(user => user.Username == username && user.IsPasswordValid(password));
-            return true;
-        }
+        
         public void SignOut()
         {
-            user = null;
+            core.SignOut();
             Console.Clear();
             Console.WriteLine("КИАС Универис");
             Console.WriteLine("Вы вышли из системы");
@@ -126,7 +118,7 @@ namespace Univeris
         }
         public void Cources()
         {
-            var courses = GetAllCourses();
+            var courses = core.GetCourses();
             Console.WriteLine("Мои курсы:");
             int i = 0;
             foreach (var course in courses)
@@ -137,35 +129,19 @@ namespace Univeris
             if (i == 0) Console.WriteLine("Вы не участвуете ни в одном курсе");
             return;
         }
-        public List<Course> GetAllCourses()
-        {
-            List<Course> courses = new();
-            var accessClaims = data.Context.CourseAccess.FindAll(claim => claim.User == user);
-            foreach (var claim in accessClaims) courses.Add((Course)claim.Value);
-            return courses;
-        }
-        public List<Course> GetStudyCourses()
-        {
-            List<Course> courses = new();
-            var accessClaims = data.Context.CourseAccess.FindAll(claim => claim.User == user && claim.Level == AccessLevel.Student);
-            foreach (var claim in accessClaims) courses.Add((Course)claim.Value);
-            return courses;
-        }
         public void Performance()
         {
-            var courses = GetStudyCourses();
+            var courses = core.GetCourses(AccessLevel.Student);
             Console.WriteLine("Успеваемость");
             int i = 0;
             foreach (var course in courses)
             {
                 i++;
-                int sum = 0;
                 Console.WriteLine($"[{i}]\t{course.Subject.Name}\t{course.Year}\n");
-                var assessments = data.Context.Assessments.FindAll(assessment=> assessment.User == user && assessment.Course == course);
+                var assessments = core.GetAssessments(course);
                 Console.WriteLine("Текущие оценки");
                 foreach (var assessment in assessments)
                 {
-                    sum += assessment.Value;
                     Console.Write($"\t{assessment.Assignment.Name}");
                     if (assessment.Value*1.0 >= assessment.Assignment.Score*0.6)
                     {
@@ -178,17 +154,20 @@ namespace Univeris
                     Console.WriteLine($"\t{assessment.Value}");
                     Console.ResetColor();
                 }
-                var examresult = data.Context.ExamStatements.Find(exam=>exam.User == user && exam.Course == course);
-                if (examresult != null)
+                float sum = 0.0f;
+                var exam = core.GetExamStatement(course);
+                if (exam != null)
                 {
-                    sum += examresult.Value;
+                    sum = core.GetRating(assessments, exam, false);
                     Console.WriteLine("\nЭкзамен");
-                    Console.WriteLine($"\t{examresult.Exam.Name}\t{examresult.Value}");
+                    Console.WriteLine($"\t{exam.Exam.Name}\t{exam.Value}");
                 }
                 else
                 {
+                    sum = core.GetRating(assessments);
                     Console.WriteLine("\nСессия ещё не наступила");
                 }
+                
                 Console.Write($"\nИтого {sum} баллов\n\nОценка за дисциплину: ");
                 if (sum >= 85)
                 {
@@ -220,11 +199,11 @@ namespace Univeris
         public void Account()
         {
             Console.WriteLine("Ваш аккаунт");
-            Console.WriteLine($"Имя:\t{user?.Username}");
-            Console.WriteLine($"Почта:\t{user?.Email}");
-            Console.WriteLine($"Телефон:\t{user?.Phone}");
+            Console.WriteLine($"Имя:\t{core.User?.Username}");
+            Console.WriteLine($"Почта:\t{core.User?.Email}");
+            Console.WriteLine($"Телефон:\t{core.User?.Phone}");
             
-            var claims = data.Context.Claims.FindAll(claim => claim.User == user);
+            var claims = core.Data.Context.Claims.FindAll(claim => claim.User == core.User);
             if (claims.Count == 0)
             {
                 Console.WriteLine("У вас нет утверждений в системе");

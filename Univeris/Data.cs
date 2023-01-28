@@ -16,15 +16,15 @@ namespace Univeris
         public Context Context { get; set; }
         public Data()
         {
-            Open();
-            /*Context = new Context();
+            //Open();
+            Context = new Context();
             GetFaculty();
             GetStudy();
             GetActualIdentities();
             GetActualStudy();
             GetGroups();
-            GetClaims();*/
-            Save();
+            GetClaims();
+            //Save();
         }
         void GetFaculty()
         {
