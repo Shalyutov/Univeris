@@ -7,11 +7,11 @@ using Univeris.Actual;
 
 namespace Univeris.Identity.Claims
 {
-    enum AccessLevel
+    public enum AccessLevel
     {
         Guest, Student, Teacher, Administrator
     }
-    internal class AccessClaim : Claim<Course>
+    public class AccessClaim : Claim<Course>
     {
         private Course course;
         public AccessLevel Level { get; set; }

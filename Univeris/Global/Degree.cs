@@ -9,7 +9,7 @@ namespace Univeris.Global
     /// <summary>
     /// Направление обучения (программа обучения)
     /// </summary>
-    internal class Degree
+    public class Degree
     {
         /// <summary>
         /// Код/классификатор программы обучения

@@ -12,7 +12,7 @@ using Univeris.Identity.Claims;
 
 namespace Univeris
 {
-    internal class Context
+    public class Context
     {
         #region Global
         public List<Faculty> Faculties { get; set; } = new List<Faculty>();

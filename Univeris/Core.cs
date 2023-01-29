@@ -11,7 +11,7 @@ using Univeris.Identity.Claims;
 
 namespace Univeris
 {
-    internal class Core
+    public class Core
     {
         public User? User;
         public Data Data;
@@ -20,15 +20,15 @@ namespace Univeris
             Data = new Data();
         }
         #region Identity Access Management
-        public User? FindUser(Data data, string username)
+        public User? FindUser(string username)
         {
             if (string.IsNullOrEmpty(username)) return null;
-            User? user = data.Context.Users.Find(user => user.Username == username);
+            User? user = Data.Context.Users.Find(user => user.Username == username);
             return user;
         }
         public bool SignIn(string username, string password)
         {
-            User? user = FindUser(Data, username);
+            User? user = FindUser(username);
             if (user == null) 
             { 
                 return false; 

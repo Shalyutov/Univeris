@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 
 namespace Univeris
 {
-    internal class Data
+    public class Data
     {
         public Context Context { get; set; }
         public Data()

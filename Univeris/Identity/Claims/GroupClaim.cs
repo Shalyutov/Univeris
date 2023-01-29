@@ -8,7 +8,7 @@ using Univeris.Global;
 
 namespace Univeris.Identity.Claims
 {
-    internal class GroupClaim : Claim<Group>
+    public class GroupClaim : Claim<Group>
     {
         private Group group;
         public override Group Value => group;

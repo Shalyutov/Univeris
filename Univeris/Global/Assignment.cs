@@ -10,7 +10,7 @@ namespace Univeris.Global
     /// <summary>
     /// Тип контрольной точки
     /// </summary>
-    enum AssignmentType
+    public enum AssignmentType
     {
         /// <summary>
         /// Контрольная работа
@@ -44,7 +44,7 @@ namespace Univeris.Global
     /// <summary>
     /// Контрольная точка
     /// </summary>
-    internal class Assignment
+    public class Assignment
     {
         /// <summary>
         /// Название контрольной точки

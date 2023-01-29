@@ -9,7 +9,7 @@ namespace Univeris.Global
     /// <summary>
     /// Факультет/институт/высшая школа
     /// </summary>
-    internal class Faculty
+    public class Faculty
     {
         /// <summary>
         /// Наименование института/высшей школы/факультета

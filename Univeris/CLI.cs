@@ -16,6 +16,7 @@ namespace Univeris
         {
             core = new Core();
         }
+        #region Command Line Handler
         public void Handle()
         {
             Console.WriteLine("КИАС Универис");
@@ -67,6 +68,8 @@ namespace Univeris
             if (action == SignIn) return;
             action();
         }
+        #endregion
+        #region IAM
         public void SignIn()
         {
             Console.WriteLine("Вход в систему");
@@ -107,7 +110,6 @@ namespace Univeris
             } while (key != ConsoleKey.Enter);
             return pass;
         }
-        
         public void SignOut()
         {
             core.SignOut();
@@ -116,6 +118,29 @@ namespace Univeris
             Console.WriteLine("Вы вышли из системы");
             return;
         }
+        public void Account()
+        {
+            Console.WriteLine("Ваш аккаунт");
+            Console.WriteLine($"Имя:\t{core.User?.Username}");
+            Console.WriteLine($"Почта:\t{core.User?.Email}");
+            Console.WriteLine($"Телефон:\t{core.User?.Phone}");
+
+            var claims = core.Data.Context.Claims.FindAll(claim => claim.User == core.User);
+            if (claims.Count == 0)
+            {
+                Console.WriteLine("У вас нет утверждений в системе");
+            }
+            else
+            {
+                Console.WriteLine("\nВаши утверждения в системе");
+                foreach (var claim in claims)
+                {
+                    Console.WriteLine("\t" + claim.ToString());
+                }
+            }
+        }
+        #endregion
+        #region PRS
         public void Cources()
         {
             var courses = core.GetCourses();
@@ -196,26 +221,6 @@ namespace Univeris
             }
             if (i == 0) Console.WriteLine("Вы не участвуете ни в одном курсе");
         }
-        public void Account()
-        {
-            Console.WriteLine("Ваш аккаунт");
-            Console.WriteLine($"Имя:\t{core.User?.Username}");
-            Console.WriteLine($"Почта:\t{core.User?.Email}");
-            Console.WriteLine($"Телефон:\t{core.User?.Phone}");
-            
-            var claims = core.Data.Context.Claims.FindAll(claim => claim.User == core.User);
-            if (claims.Count == 0)
-            {
-                Console.WriteLine("У вас нет утверждений в системе");
-            }
-            else
-            {
-                Console.WriteLine("\nВаши утверждения в системе");
-                foreach (var claim in claims)
-                {
-                    Console.WriteLine("\t" + claim.ToString());
-                }
-            }
-        }
+        #endregion
     }
 }

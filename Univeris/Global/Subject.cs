@@ -10,7 +10,7 @@ namespace Univeris.Global
     /// <summary>
     /// Дисциплина образовательной программы
     /// </summary>
-    internal class Subject
+    public class Subject
     {
         /// <summary>
         /// Название дисциплины

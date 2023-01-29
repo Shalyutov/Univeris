@@ -11,7 +11,7 @@ namespace Univeris.Global
     /// <summary>
     /// Шаг критерия
     /// </summary>
-    class CriteriaStep : IEquatable<CriteriaStep?>, IComparable<CriteriaStep>
+    public class CriteriaStep : IEquatable<CriteriaStep?>, IComparable<CriteriaStep>
     {
         /// <summary>
         /// Название критерия
@@ -75,7 +75,7 @@ namespace Univeris.Global
     /// <summary>
     /// Критерий оценивания контрольной точки
     /// </summary>
-    class AssignmentCriteria
+    public class AssignmentCriteria
     {
         /// <summary>
         /// Название критерия
@@ -158,7 +158,7 @@ namespace Univeris.Global
     /// <summary>
     /// Контрольная точка с критериями оценивания
     /// </summary>
-    internal class ExtendedAssignment : Assignment
+    public class ExtendedAssignment : Assignment
     {
         /// <summary>
         /// Список критериев

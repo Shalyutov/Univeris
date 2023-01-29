@@ -8,7 +8,7 @@ using Univeris.Global;
 
 namespace Univeris.Identity.Claims
 {
-    internal class DepartmentClaim : Claim<Department>
+    public class DepartmentClaim : Claim<Department>
     {
         private Department department;
         public override Department Value => department;

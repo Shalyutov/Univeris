@@ -9,7 +9,7 @@ namespace Univeris.Global
     /// <summary>
     /// Тип аттестации
     /// </summary>
-    enum ExamType
+    public enum ExamType
     {
         /// <summary>
         /// Экзамен
@@ -39,7 +39,7 @@ namespace Univeris.Global
     /// <summary>
     /// Аттестация по дисциплине (экзамен/зачёт/дифференцированный зачёт/курсовая работа...)
     /// </summary>
-    internal class Exam
+    public class Exam
     {
         /// <summary>
         /// Название аттестации

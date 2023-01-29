@@ -8,7 +8,7 @@ using Univeris.Identity;
 
 namespace Univeris.Actual
 {
-    internal class Assessment
+    public class Assessment
     {
         public Course Course { get; set; }
         public Assignment Assignment { get; set; }

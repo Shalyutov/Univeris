@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Univeris.Identity
 {
-    internal class ClaimType
+    public class ClaimType
     {
         public string Name { get; set; }
         public string Description { get; set; }

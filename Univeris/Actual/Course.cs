@@ -7,7 +7,7 @@ using Univeris.Global;
 
 namespace Univeris.Actual
 {
-    internal class Course : IEquatable<Course?>
+    public class Course : IEquatable<Course?>
     {
         public Subject Subject { get; set; }
         public int Year { get; set; }

@@ -10,7 +10,7 @@ using Univeris.Identity.Claims;
 
 namespace Univeris.Identity
 {
-    internal class Claim<T>
+    public class Claim<T>
     {
         public ClaimType Type { get; set; }
         public User User { get; set; }
@@ -24,7 +24,7 @@ namespace Univeris.Identity
         }
     }
     
-    internal class Claim : Claim<object>
+    public class Claim : Claim<object>
     {
         private object _value;
         public override object Value => _value;
@@ -64,8 +64,9 @@ namespace Univeris.Identity
         }
         public override string ToString()
         {
-            if(this==null) 
+            if(this == null) 
                 return string.Empty;
+
             if (_value.GetType() == typeof(Department)) 
                 return ((DepartmentClaim)this).ToString();
             else if (_value.GetType() == typeof(AcademicGroup)) 

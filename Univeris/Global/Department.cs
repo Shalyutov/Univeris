@@ -9,7 +9,7 @@ namespace Univeris.Global
     /// <summary>
     /// Кафедра/Подразделение
     /// </summary>
-    internal class Department
+    public class Department
     {
         /// <summary>
         /// Наименование кафедры/подразделения

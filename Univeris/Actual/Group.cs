@@ -8,7 +8,7 @@ using Univeris.Global;
 
 namespace Univeris.Actual
 {
-    internal class Group : IEquatable<Group?>
+    public class Group : IEquatable<Group?>
     {
         public virtual string Name { get; set; }
         public string Description { get; set; }
