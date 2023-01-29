@@ -13,17 +13,30 @@ namespace Univeris
 {
     public class Core
     {
+        public event OnCoreInitialized? CoreInitialized;
+        public event OnSelect? DataSelected;
+        public event OnUpdate? DataUpdated;
+        public event OnCompute? ValueComputed;
+        public event OnSignedIn? UserSignedIn;
+
         public User? User;
         public Data Data;
+
         public Core()
         {
             Data = new Data();
         }
+        public void Start()
+        {
+            CoreInitialized?.Invoke();
+        }
+
         #region Identity Access Management
         public User? FindUser(string username)
         {
             if (string.IsNullOrEmpty(username)) return null;
             User? user = Data.Context.Users.Find(user => user.Username == username);
+            DataSelected?.Invoke("Произведён поиск пользователя с указанным именем");
             return user;
         }
         public bool SignIn(string username, string password)
@@ -36,6 +49,7 @@ namespace Univeris
             else if(user.IsPasswordValid(password))
             {
                 this.User = user;
+                UserSignedIn?.Invoke($"Пользователь {user.Username} вошёл в система");
                 return true;
             }
             return false;
@@ -47,6 +61,10 @@ namespace Univeris
                 User = null;
             }
         }
+        public bool IsAccessValid(User user, object subject)//TODO
+        {
+            return true;
+        }
         #endregion
         #region Point Rating System
         public List<Course> GetCourses(User user)
@@ -54,6 +72,7 @@ namespace Univeris
             List<Course> courses = new();
             var accessClaims = Data.Context.CourseAccess.FindAll(claim => claim.User == user);
             foreach (var claim in accessClaims) courses.Add(claim.Value);
+            DataSelected?.Invoke("Выбраны все курсы для указанного пользователя");
             return courses;
         }
         public List<Course> GetCourses()
@@ -72,6 +91,7 @@ namespace Univeris
             List<Course> courses = new();
             var accessClaims = Data.Context.CourseAccess.FindAll(claim => claim.User == user && claim.Level == level);
             foreach (var claim in accessClaims) courses.Add(claim.Value);
+            DataSelected?.Invoke("Выбраны все подходящие по указанной роли курсы для указанного пользователя");
             return courses;
         }
         public List<Course> GetCourses(AccessLevel level)
@@ -89,6 +109,7 @@ namespace Univeris
         {
             List<Assessment> assessments;
             assessments = Data.Context.Assessments.FindAll(assessment => assessment.User == user && assessment.Course == course);
+            DataSelected?.Invoke("Получены все оценки текущего контроля для пользователя в рамках курса");
             return assessments;
         }
         public List<Assessment> GetAssessments(Course course)
@@ -106,6 +127,7 @@ namespace Univeris
         {
             ExamStatement? statement;
             statement = Data.Context.ExamStatements.Find(exam => exam.User == user && exam.Course == course);
+            DataSelected?.Invoke("Запрошен результат экзамена для пользователя в рамках курса");
             return statement;
         }
         public ExamStatement? GetExamStatement(Course course)
@@ -129,6 +151,11 @@ namespace Univeris
             {
                 rating *= 0.6f;
                 rating += (statement!.Value * 1.0f / statement.Exam.Score * 1.0f) * 0.4f;
+                ValueComputed?.Invoke("Подсчитан рейтинг на основе текущего рейтинга с учётом сдачи экзамена");
+            }
+            else
+            {
+                ValueComputed?.Invoke("Подсчитан рейтинг на основе текущего рейтинга");
             }
             return rating * 100.0f;
         }
@@ -138,6 +165,25 @@ namespace Univeris
             rating = GetRating(assessments, null, true);
             return rating;
         }
+        public bool SetAssessment(Course course, Assignment assignment, int value, User user)
+        {
+            Assessment assessment = new Assessment(course, assignment, value, user);
+            Data.Context.Assessments.Add(assessment);
+            DataUpdated?.Invoke("Зафиксирована оценка за контрольное мероприятие");
+            return true;
+        }
+        public bool SetExamStatement(Course course, Exam exam, int value, User user)
+        {
+            ExamStatement statement = new ExamStatement(course, exam, value, user);
+            Data.Context.ExamStatements.Add(statement);
+            DataUpdated?.Invoke("Зафиксирована оценка за аттестационное мероприятие");
+            return true;
+        }
         #endregion
+        public delegate void OnCoreInitialized();
+        public delegate void OnSelect(string entity);
+        public delegate void OnUpdate(string entity);
+        public delegate void OnCompute(string entity);
+        public delegate void OnSignedIn(string entity);
     }
 }

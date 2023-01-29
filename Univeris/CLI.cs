@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NLog;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,10 +12,23 @@ namespace Univeris
 {
     internal class CLI
     {
+        private readonly Logger logger;
         private Core core;
         public CLI()
         {
             core = new Core();
+
+            logger = LogManager.Setup().LoadConfiguration(builder => {
+                builder.ForLogger().FilterMinLevel(LogLevel.Debug).WriteToFile(fileName: $"log-{DateTime.Now}.txt");
+            }).GetCurrentClassLogger();
+
+            core.CoreInitialized += OnCoreInitialized;
+            core.DataSelected += OnDataOperation;
+            core.DataUpdated += OnDataOperation;
+            core.ValueComputed += OnDataOperation;
+            core.UserSignedIn += OnSignedIn;
+
+            core.Start();
         }
         #region Command Line Handler
         public void Handle()
@@ -220,6 +234,20 @@ namespace Univeris
                 } 
             }
             if (i == 0) Console.WriteLine("Вы не участвуете ни в одном курсе");
+        }
+        #endregion
+        #region Logger Handlers
+        void OnCoreInitialized()
+        {
+            logger.Debug("Ядро инициализировано");
+        }
+        void OnDataOperation(string entity)
+        {
+            logger.Debug(entity + " Context CLI");
+        }
+        void OnSignedIn(string entity)
+        {
+            logger.Debug(entity + " CLI");
         }
         #endregion
     }
