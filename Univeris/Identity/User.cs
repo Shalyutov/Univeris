@@ -9,28 +9,22 @@ namespace Univeris.Identity
 {
     public class User : IEquatable<User?>
     {
-        private int uuid;
-        private string name;
-        private string email;
-        private string phone;
-        private string password;
+        public int Uuid { get; set; }
+        public string Username { get; set; }
+        public string Email { get; set; }
+        public string Phone { get; set; }
+        public string Password { get; set; }
 
-        public int Uuid { get => uuid; private set => uuid = value; }
-        public string Username { get => name; private set => name = value; }
-        public string Email { get => email; private set => email = value; }
-        public string Phone { get => phone; private set => phone = value; }
-        
-
-        public User(int uuid, string username, string password, string email, string phone)
+        public User(int Uuid, string Username, string Email, string Phone, string Password)
         {
-            Uuid = uuid;
-            this.name = username ?? throw new ArgumentNullException(nameof(name));
-            this.password = password ?? throw new ArgumentNullException(nameof(password));
-            this.email = email ?? throw new ArgumentNullException(nameof(email));
-            this.phone = phone ?? throw new ArgumentNullException(nameof(phone));
+            this.Uuid = Uuid;
+            this.Username = Username ?? throw new ArgumentNullException(nameof(Username));
+            this.Email = Email ?? throw new ArgumentNullException(nameof(Email));
+            this.Phone = Phone ?? throw new ArgumentNullException(nameof(Phone));
+            this.Password = Password ?? throw new ArgumentNullException(nameof(Password));
         }
         
-        public bool IsPasswordValid(string password) => password == this.password; 
+        public bool IsPasswordValid(string password) => password == Password; 
 
         public override bool Equals(object? obj)
         {
@@ -41,15 +35,15 @@ namespace Univeris.Identity
         {
             return other is not null &&
                    Uuid == other.Uuid &&
-                   name == other.name &&
-                   password == other.password &&
-                   email == other.email &&
-                   phone == other.phone;
+                   Username == other.Username &&
+                   Email == other.Email &&
+                   Phone == other.Phone && 
+                   Password == other.Password;
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Uuid, name, password, email, phone);
+            return HashCode.Combine(Uuid, Username, Email, Phone, Password);
         }
 
         public static bool operator ==(User? left, User? right)

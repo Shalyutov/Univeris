@@ -10,7 +10,7 @@ namespace Univeris.Global
     /// <summary>
     /// Дисциплина образовательной программы
     /// </summary>
-    public class Subject
+    public class Subject : IEquatable<Subject?>
     {
         /// <summary>
         /// Название дисциплины
@@ -69,6 +69,39 @@ namespace Univeris.Global
             Practice = practice;
             Laboratory = laboratory;
             SelfStudent = selfStudent;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as Subject);
+        }
+
+        public bool Equals(Subject? other)
+        {
+            return other is not null &&
+                   Name == other.Name &&
+                   EqualityComparer<Degree>.Default.Equals(Degree, other.Degree) &&
+                   Description == other.Description &&
+                   Semester == other.Semester &&
+                   Lectures == other.Lectures &&
+                   Practice == other.Practice &&
+                   Laboratory == other.Laboratory &&
+                   SelfStudent == other.SelfStudent;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Name, Degree, Description, Semester, Lectures, Practice, Laboratory, SelfStudent);
+        }
+
+        public static bool operator ==(Subject? left, Subject? right)
+        {
+            return EqualityComparer<Subject>.Default.Equals(left, right);
+        }
+
+        public static bool operator !=(Subject? left, Subject? right)
+        {
+            return !(left == right);
         }
     }
 }

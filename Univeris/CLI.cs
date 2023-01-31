@@ -19,7 +19,7 @@ namespace Univeris
             core = new Core();
 
             logger = LogManager.Setup().LoadConfiguration(builder => {
-                builder.ForLogger().FilterMinLevel(LogLevel.Debug).WriteToFile(fileName: $"log-{DateTime.Now}.txt");
+                builder.ForLogger().FilterMinLevel(LogLevel.Debug).WriteToFile(fileName: $"logs/log-{DateTime.Now}.txt");
             }).GetCurrentClassLogger();
 
             core.CoreInitialized += OnCoreInitialized;
@@ -27,6 +27,8 @@ namespace Univeris
             core.DataUpdated += OnDataOperation;
             core.ValueComputed += OnDataOperation;
             core.UserSignedIn += OnSignedIn;
+            core.CoreAction += OnCoreAction;
+            core.OnErrorOccured += OnCoreError;
 
             core.Start();
         }
@@ -243,11 +245,19 @@ namespace Univeris
         }
         void OnDataOperation(string entity)
         {
-            logger.Debug(entity + " Context CLI");
+            logger.Debug(entity + " - Context CLI");
+        }
+        void OnCoreAction(string entity)
+        {
+            logger.Debug(entity + " - Ядро Универис");
+        }
+        void OnCoreError(string entity)
+        {
+            logger.Error(entity + " - Ядро Универис");
         }
         void OnSignedIn(string entity)
         {
-            logger.Debug(entity + " CLI");
+            logger.Debug(entity + " - CLI");
         }
         #endregion
     }

@@ -18,6 +18,8 @@ namespace Univeris
         public event OnUpdate? DataUpdated;
         public event OnCompute? ValueComputed;
         public event OnSignedIn? UserSignedIn;
+        public event OnError? OnErrorOccured;
+        public event OnCoreAction? CoreAction;
 
         public User? User;
         public Data Data;
@@ -25,6 +27,21 @@ namespace Univeris
         public Core()
         {
             Data = new Data();
+            try
+            {
+                Data.Open();
+            }
+            catch(FileNotFoundException)
+            {
+                CoreAction?.Invoke("Файла конфигурации не существует");
+                Data.GetTemplate();
+                CoreAction?.Invoke("Установлен шаблон конфиграции");
+                Data.Save();
+            }
+            catch (Exception)
+            {
+                OnErrorOccured?.Invoke("Ошибка чтения файла конфигурации");
+            }
         }
         public void Start()
         {
@@ -185,5 +202,7 @@ namespace Univeris
         public delegate void OnUpdate(string entity);
         public delegate void OnCompute(string entity);
         public delegate void OnSignedIn(string entity);
+        public delegate void OnError(string entity);
+        public delegate void OnCoreAction(string entity);
     }
 }

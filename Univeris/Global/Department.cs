@@ -9,7 +9,7 @@ namespace Univeris.Global
     /// <summary>
     /// Кафедра/Подразделение
     /// </summary>
-    public class Department
+    public class Department : IEquatable<Department?>
     {
         /// <summary>
         /// Наименование кафедры/подразделения
@@ -29,6 +29,34 @@ namespace Univeris.Global
             Name = name ?? throw new ArgumentNullException(nameof(name));
             Faculty = faculty ?? throw new ArgumentNullException(nameof(faculty));
             Description = description ?? throw new ArgumentNullException(nameof(description));
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as Department);
+        }
+
+        public bool Equals(Department? other)
+        {
+            return other is not null &&
+                   Name == other.Name &&
+                   EqualityComparer<Faculty>.Default.Equals(Faculty, other.Faculty) &&
+                   Description == other.Description;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Name, Faculty, Description);
+        }
+
+        public static bool operator ==(Department? left, Department? right)
+        {
+            return EqualityComparer<Department>.Default.Equals(left, right);
+        }
+
+        public static bool operator !=(Department? left, Department? right)
+        {
+            return !(left == right);
         }
     }
 }

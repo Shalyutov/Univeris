@@ -16,18 +16,20 @@ namespace Univeris
         public Context Context { get; set; }
         public Data()
         {
-            //Open();
             Context = new Context();
+        }
+        public void GetTemplate()
+        {
             GetFaculty();
             GetStudy();
             GetActualIdentities();
             GetActualStudy();
             GetGroups();
             GetClaims();
-            //Save();
         }
         void GetFaculty()
         {
+            if (Context == null) return;
             Context.Faculties.Add(new Faculty("Высшая школа электроники и компьютерных наук", ""));
             Context.Departments.Add(new Department("Системное программирование", Context.Faculties[0], ""));
             Context.Departments.Add(new Department("Математическое обеспечение информационных технологий", Context.Faculties[0], ""));
@@ -35,6 +37,7 @@ namespace Univeris
         }
         void GetStudy()
         {
+            if (Context == null) return;
             Context.Subjects.Add(new Subject("Алгебра и геометрия", Context.Degrees[0], "", 1));
             Context.Exams.Add(new Exam("Итоговый тест", ExamType.Exam, Context.Subjects[0], "", 40));
             Context.Assignments.Add(new Assignment("Матрицы", AssignmentType.CheckPoint, Context.Subjects[0], 15));
@@ -44,12 +47,14 @@ namespace Univeris
         }
         void GetActualIdentities()
         {
-            Context.Users.Add(new User(10001, "Андрей", "123", "shalyutov.a@ya.ru", "+79000000000"));
-            Context.Users.Add(new User(10002, "Ирина", "456", "irina@ya.ru", "+79100000007"));
-            Context.Users.Add(new User(10003, "Игорь", "789", "igor@ya.ru", "+79059000521"));
+            if (Context == null) return;
+            Context.Users.Add(new User(10001, "Андрей", "shalyutov.a@ya.ru", "+79000000000", "123"));
+            Context.Users.Add(new User(10002, "Ирина", "irina@ya.ru", "+79100000007", "456"));
+            Context.Users.Add(new User(10003, "Игорь", "igor@ya.ru", "+79059000521", "789"));
         }
         void GetActualStudy()
         {
+            if (Context == null) return;
             Context.Courses.Add(new Course(Context.Subjects[0], 2023));
             Context.Assessments.Add(new Assessment(Context.Courses[0], Context.Assignments[0], 15, Context.Users[0]));
             Context.Assessments.Add(new Assessment(Context.Courses[0], Context.Assignments[1], 12, Context.Users[0]));
@@ -59,11 +64,13 @@ namespace Univeris
         }
         void GetGroups()
         {
+            if (Context == null) return;
             Context.Groups.Add(new AcademicGroup("КЭ-301", "", Context.Degrees[0], 3));
             Context.Groups.Add(new AcademicGroup("КЭ-302", "", Context.Degrees[0], 3));
         }
         void GetClaims()
         {
+            if (Context == null) return;
             Context.ClaimTypes.Add(new ClaimType("Участник курса", "Обладатель утверждения получает доступ к курсу"));
             Context.ClaimTypes.Add(new ClaimType("Сотрудник кафедры", "Обладатель утверждения прикреплён к кафедре"));
             Context.ClaimTypes.Add(new ClaimType("Студент группы", "Обладатель утверждения состоит в академической группе"));
@@ -79,11 +86,11 @@ namespace Univeris
         public void Open()
         {
             string text = File.OpenText("data.json").ReadToEnd();
-            var context = JsonConvert.DeserializeObject<Context>(text);
+            Context = JsonConvert.DeserializeObject<Context>(text) ?? new Context();
         }
         public void Save()
         {
-            string json = JsonConvert.SerializeObject(this, Formatting.Indented, new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.All });
+            string json = JsonConvert.SerializeObject(Context, Formatting.Indented, new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Auto });
             File.WriteAllText("data.json", json);
         }
     }
