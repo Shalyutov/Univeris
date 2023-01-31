@@ -73,7 +73,7 @@ namespace Univeris
             else if(user.IsPasswordValid(password))
             {
                 this.User = user;
-                UserSignedIn?.Invoke($"Пользователь {user.Username} вошёл в система");
+                UserSignedIn?.Invoke($"Пользователь {user.Username} вошёл в систему");
                 return true;
             }
             return false;

@@ -16,6 +16,7 @@ namespace Univeris
         private Core core;
         public CLI()
         {
+            Console.Title = "Универис";
             core = new Core();
 
             logger = LogManager.Setup().LoadConfiguration(builder => {
@@ -30,7 +31,7 @@ namespace Univeris
             core.CoreAction += OnCoreAction;
             core.OnErrorOccured += OnCoreError;
 
-            core.Start(true);//Core start with template data when param true
+            core.Start(false);//Core start with template data when param true
         }
 
         #region Command Line Handler
@@ -55,7 +56,7 @@ namespace Univeris
                     case "курс":
                         Navigate(Cources);
                         break;
-                    case "оценки":
+                    case "брс":
                         Navigate(Performance);
                         break;
                     case "я":
@@ -63,6 +64,9 @@ namespace Univeris
                         break;
                     case "выйти":
                         Navigate(SignOut);
+                        break;
+                    case "?":
+                        Navigate(Help);
                         break;
                 }
                 if (command == "закрыть") break;
@@ -72,6 +76,12 @@ namespace Univeris
         public void Navigate(Action action)
         {
             Console.Clear();
+            if (action == Help)
+            {
+                Console.WriteLine("КИАС Универис");
+                action();
+                return;
+            }
             if (core.User == null)
             {
                 Console.WriteLine("КИАС Универис");
@@ -80,10 +90,22 @@ namespace Univeris
                 SignIn();
                 if (core.User == null) return;
             }
-            for(int i = 0; i<2; i++) Console.Clear();
+            Console.Clear();
             Console.WriteLine($"КИАС Универис\tВход выполнен\tАккаунт: {core.User.Username}");
             if (action == SignIn) return;
             action();
+        }
+        public void Help()
+        {
+            Console.WriteLine("Доступные команды\n");
+            Console.WriteLine("\"войти\"\tВыполнить вход в систему используя имя пользователя и пароль");
+            Console.WriteLine("\"выйти\"\tВыйти из информационной системы");
+            Console.WriteLine("\"я\"\tПросмотреть информацию о профиле");
+            Console.WriteLine("\"курс\"\tПросмотреть информацию о подключенных курсах");
+            Console.WriteLine("\"брс\"\tПросмотреть информацию об успеваемости на изучаемых курсах");
+            Console.WriteLine("\"?\"\tВывести информацию о доступных командах");
+            Console.WriteLine();
+            return;
         }
         #endregion
 
@@ -158,6 +180,7 @@ namespace Univeris
             }
         }
         #endregion
+
         #region PRS
         public void Cources()
         {
@@ -252,6 +275,7 @@ namespace Univeris
             return;
         }
         #endregion
+
         #region Logger Handlers
         void OnCoreInitialized()
         {
