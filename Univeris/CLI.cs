@@ -30,8 +30,9 @@ namespace Univeris
             core.CoreAction += OnCoreAction;
             core.OnErrorOccured += OnCoreError;
 
-            core.Start();
+            core.Start(true);//Core start with template data when param true
         }
+
         #region Command Line Handler
         public void Handle()
         {
@@ -79,12 +80,13 @@ namespace Univeris
                 SignIn();
                 if (core.User == null) return;
             }
-            Console.Clear();
+            for(int i = 0; i<2; i++) Console.Clear();
             Console.WriteLine($"КИАС Универис\tВход выполнен\tАккаунт: {core.User.Username}");
             if (action == SignIn) return;
             action();
         }
         #endregion
+
         #region IAM
         public void SignIn()
         {
@@ -180,10 +182,19 @@ namespace Univeris
                 i++;
                 Console.WriteLine($"[{i}]\t{course.Subject.Name}\t{course.Year}\n");
                 var assessments = core.GetAssessments(course);
+                var assignments = core.GetAssignments(course.Subject);
                 Console.WriteLine("Текущие оценки");
-                foreach (var assessment in assessments)
+                for (int a = 0; a < assignments.Count; a++)
                 {
-                    Console.Write($"\t{assessment.Assignment.Name}");
+                    Console.Write($"\t{assignments[a].Name}");
+                    var assessment = assessments.Find(mark => mark.Assignment == assignments[a]);
+                    if (assessment == null)
+                    {
+                        Console.ForegroundColor = ConsoleColor.DarkGray;
+                        Console.WriteLine("\tНе выполнено");
+                        Console.ResetColor();
+                        continue;
+                    }
                     if (assessment.Value*1.0 >= assessment.Assignment.Score*0.6)
                     {
                         Console.ForegroundColor = ConsoleColor.Green;
@@ -192,24 +203,26 @@ namespace Univeris
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
                     }
-                    Console.WriteLine($"\t{assessment.Value}");
+                    Console.WriteLine($"\t{assessment.Value} из {assessment.Assignment.Score}");
                     Console.ResetColor();
                 }
                 float sum = 0.0f;
                 var exam = core.GetExamStatement(course);
                 if (exam != null)
                 {
-                    sum = core.GetRating(assessments, exam, false);
+                    sum = core.GetRating(assignments, assessments, exam, false);
                     Console.WriteLine("\nЭкзамен");
                     Console.WriteLine($"\t{exam.Exam.Name}\t{exam.Value}");
+                    Console.Write($"\nИтого: {sum} баллов\n\nОценка за дисциплину: ");
                 }
                 else
                 {
-                    sum = core.GetRating(assessments);
-                    Console.WriteLine("\nСессия ещё не наступила");
+                    sum = core.GetRating(assignments, assessments);
+                    Console.WriteLine("\nАттестационное мероприятие не начато");
+                    Console.Write($"\nТекущий контроль: {sum:F2} баллов\n\nПредварительная оценка за дисциплину: ");
                 }
                 
-                Console.Write($"\nИтого {sum} баллов\n\nОценка за дисциплину: ");
+                
                 if (sum >= 85)
                 {
                     Console.ForegroundColor = ConsoleColor.Green;
@@ -236,6 +249,7 @@ namespace Univeris
                 } 
             }
             if (i == 0) Console.WriteLine("Вы не участвуете ни в одном курсе");
+            return;
         }
         #endregion
         #region Logger Handlers

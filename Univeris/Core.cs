@@ -27,11 +27,22 @@ namespace Univeris
         public Core()
         {
             Data = new Data();
+        }
+        public void Start(bool TemplateSession)
+        {
+            CoreInitialized?.Invoke();
+            if (TemplateSession)
+            {
+                Data.GetTemplate();
+                CoreAction?.Invoke("Загружен шаблон конфиграции");
+                return;
+            }
             try
             {
                 Data.Open();
+                CoreAction?.Invoke("Открыт файл конфигурации");
             }
-            catch(FileNotFoundException)
+            catch (FileNotFoundException)
             {
                 CoreAction?.Invoke("Файла конфигурации не существует");
                 Data.GetTemplate();
@@ -42,10 +53,6 @@ namespace Univeris
             {
                 OnErrorOccured?.Invoke("Ошибка чтения файла конфигурации");
             }
-        }
-        public void Start()
-        {
-            CoreInitialized?.Invoke();
         }
 
         #region Identity Access Management
@@ -83,6 +90,7 @@ namespace Univeris
             return true;
         }
         #endregion
+
         #region Point Rating System
         public List<Course> GetCourses(User user)
         {
@@ -158,12 +166,21 @@ namespace Univeris
                 return null;
             }
         }
-        public float GetRating(List<Assessment> assessments, ExamStatement? statement, bool CurrentOnly)
+        public List<Assignment> GetAssignments(Subject subject)
+        {
+            List<Assignment> assignments;
+            assignments = Data.Context.Assignments.FindAll(assignment => assignment.Subject == subject);
+            DataSelected?.Invoke("Получены все контрольные мероприятия в рамках дисциплины");
+            return assignments;
+        }
+        public float GetRating(List<Assignment> assignments, List<Assessment> assessments, ExamStatement? statement, bool CurrentOnly)
         {
             float rating = 0.0f;
             float sum = 0.0f;
-            foreach (var assessment in assessments) sum += assessment.Assignment.Score;
-            foreach (var assessment in assessments) rating += (assessment.Value * 1.0f / assessment.Assignment.Score * 1.0f)*(assessment.Assignment.Score*1.0f/sum);
+            foreach (var assignment in assignments) 
+                sum += assignment.Score;
+            foreach (var assessment in assessments) 
+                rating += (assessment.Value * 1.0f / assessment.Assignment.Score * 1.0f) * (assessment.Assignment.Score * 1.0f / sum);
             if(!CurrentOnly)
             {
                 rating *= 0.6f;
@@ -176,10 +193,10 @@ namespace Univeris
             }
             return rating * 100.0f;
         }
-        public float GetRating(List<Assessment> assessments)
+        public float GetRating(List<Assignment> assignments, List<Assessment> assessments)
         {
             float rating;
-            rating = GetRating(assessments, null, true);
+            rating = GetRating(assignments, assessments, null, true);
             return rating;
         }
         public bool SetAssessment(Course course, Assignment assignment, int value, User user)
@@ -197,6 +214,7 @@ namespace Univeris
             return true;
         }
         #endregion
+
         public delegate void OnCoreInitialized();
         public delegate void OnSelect(string entity);
         public delegate void OnUpdate(string entity);
