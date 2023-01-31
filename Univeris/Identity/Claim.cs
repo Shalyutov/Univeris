@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ using Univeris.Identity.Claims;
 
 namespace Univeris.Identity
 {
-    public class Claim<T>
+    public class Claim<T> : IEquatable<Claim<T>?>
     {
         public ClaimType Type { get; set; }
         public User User { get; set; }
@@ -22,6 +23,35 @@ namespace Univeris.Identity
             User = user ?? throw new ArgumentNullException(nameof(user));
             Value = value ?? throw new ArgumentNullException(nameof(value));
         }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as Claim<T>);
+        }
+
+        public bool Equals(Claim<T>? other)
+        {
+            return other is not null &&
+                   EqualityComparer<ClaimType>.Default.Equals(Type, other.Type) &&
+                   EqualityComparer<User>.Default.Equals(User, other.User) &&
+                   EqualityComparer<T>.Default.Equals(Value, other.Value);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Type, User, Value);
+        }
+
+        public static bool operator ==(Claim<T>? left, Claim<T>? right)
+        {
+            return EqualityComparer<Claim<T>>.Default.Equals(left, right);
+        }
+
+        public static bool operator !=(Claim<T>? left, Claim<T>? right)
+        {
+            return !(left == right);
+        }
+        
     }
     
     public class Claim : Claim<object>
@@ -49,7 +79,7 @@ namespace Univeris.Identity
         public static implicit operator DepartmentClaim?(Claim claim)
         {
             if (claim.Value == null) throw new ArgumentNullException();
-            if (claim.Value.GetType() == typeof(Department))
+            if (claim.Value is Department)
                 return new DepartmentClaim(claim.Type, claim.User, (Department)claim.Value);
             else
                 return null;
@@ -57,23 +87,22 @@ namespace Univeris.Identity
         public static implicit operator GroupClaim?(Claim claim)
         {
             if (claim.Value == null) throw new ArgumentNullException();
-            if (claim.Value.GetType() == typeof(AcademicGroup))
+            if (claim.Value is AcademicGroup)
                 return new GroupClaim(claim.Type, claim.User, (Group)claim.Value);
             else
                 return null;
         }
         public override string ToString()
         {
-            if(this == null) 
+            if (this == null)
                 return string.Empty;
 
-            if (_value.GetType() == typeof(Department)) 
-                return ((DepartmentClaim)this).ToString();
-            else if (_value.GetType() == typeof(AcademicGroup)) 
-                return ((GroupClaim)this).ToString();
-            else 
-                return string.Empty;
+            return Value switch
+            {
+                Department => ((DepartmentClaim)this).ToString(),
+                Group => ((GroupClaim)this).ToString(),
+                _ => string.Empty,
+            };
         }
-
     }
 }

@@ -17,9 +17,9 @@ namespace Univeris.Identity.Claims
         {
             this.department = value;
         }
-        public static implicit operator Claim(DepartmentClaim claim)
+        public static implicit operator Claim(DepartmentClaim? claim)
         {
-            if (claim.Value == null) throw new ArgumentNullException();
+            if (claim?.Value == null) throw new ArgumentNullException();
             return new Claim(claim.Type, claim.User, claim.Value);
         }
         public override string ToString()
