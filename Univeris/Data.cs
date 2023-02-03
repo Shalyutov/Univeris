@@ -103,6 +103,11 @@ namespace Univeris
             string text = File.OpenText("data.json").ReadToEnd();
             Context = JsonConvert.DeserializeObject<Context>(text) ?? new Context();
         }
+        public void Open(string file)
+        {
+            string text = File.OpenText(file).ReadToEnd();
+            Context = JsonConvert.DeserializeObject<Context>(text) ?? new Context();
+        }
         public void Save()
         {
             string json = JsonConvert.SerializeObject(Context, Formatting.Indented, new JsonSerializerSettings() { TypeNameHandling = TypeNameHandling.Auto });

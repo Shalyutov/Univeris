@@ -54,6 +54,27 @@ namespace Univeris
                 OnErrorOccured?.Invoke("Ошибка чтения файла конфигурации");
             }
         }
+        public void Start(string file)
+        {
+            CoreInitialized?.Invoke();
+            try
+            {
+                Data.Open(file);
+                CoreAction?.Invoke("Открыт файл конфигурации");
+            }
+            catch (FileNotFoundException)
+            {
+                string message = "Файла конфигурации не существует";
+                CoreAction?.Invoke(message);
+                throw new InitException(message);
+            }
+            catch (Exception)
+            {
+                string message = "Ошибка чтения файла конфигурации";
+                OnErrorOccured?.Invoke(message);
+                throw new InitException(message);
+            }
+        }
 
         #region Identity Access Management
         public User? FindUser(string username)
@@ -85,9 +106,9 @@ namespace Univeris
                 User = null;
             }
         }
-        public bool IsAccessValid(User user, object subject)//TODO
+        public AccessLevel? GetAccessLevel(User user, Course course)
         {
-            return true;
+            return Data.Context.CourseAccess.Find(claim => claim.User == user && claim.Value == course)?.Level;
         }
         #endregion
 
