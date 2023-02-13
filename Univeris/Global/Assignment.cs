@@ -44,7 +44,7 @@ namespace Univeris.Global
     /// <summary>
     /// Контрольная точка
     /// </summary>
-    public class Assignment
+    public class Assignment : IEquatable<Assignment?>
     {
         /// <summary>
         /// Название контрольной точки
@@ -91,6 +91,35 @@ namespace Univeris.Global
             Type = type;
             Subject = subject ?? throw new ArgumentNullException(nameof(subject));
             Score = 0;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as Assignment);
+        }
+
+        public bool Equals(Assignment? other)
+        {
+            return other is not null &&
+                   Name == other.Name &&
+                   Type == other.Type &&
+                   EqualityComparer<Subject>.Default.Equals(Subject, other.Subject) &&
+                   Score == other.Score;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Name, Type, Subject, Score);
+        }
+
+        public static bool operator ==(Assignment? left, Assignment? right)
+        {
+            return EqualityComparer<Assignment>.Default.Equals(left, right);
+        }
+
+        public static bool operator !=(Assignment? left, Assignment? right)
+        {
+            return !(left == right);
         }
     }
 }

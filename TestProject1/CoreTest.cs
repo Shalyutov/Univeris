@@ -38,9 +38,9 @@ namespace TestProject1
             {
                 core.Start("data.json");
             }
-            catch (InitException)
+            catch (InitException ex)
             {
-                Assert.Fail();
+                Assert.Fail(ex.Message);
             }
 
             bool users = core.Data.Context.Users.Count > 0;

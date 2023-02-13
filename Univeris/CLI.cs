@@ -31,7 +31,8 @@ namespace Univeris
             core.CoreAction += OnCoreAction;
             core.OnErrorOccured += OnCoreError;
 
-            core.Start(false);//Core start with template data when param true
+            core.Start("data.json");//Now core starts with data from file
+            //Core start with template data when param true
         }
 
         #region Command Line Handler
